@@ -6,11 +6,10 @@ var router = express.Router();
 // Create all our routes and set up logic within those routes where required.
 router.get("/", function(req, res) {
   burger.selectAll(function(data) {
-    var hbsObject = {
+    var burgersObject = {
       burger: data
     };
-    console.log(hbsObject);
-    res.render("index", hbsObject);
+    res.render("index", burgersObject);
   });
 });
 
@@ -24,5 +23,16 @@ router.post("/", function(req, res) {
   });
 });
 
+/*the 'put' is going to devour the burger by 
+setting the devoured value to 1 where the id matches
+then refreshes the page*/
+router.put("/:id", function(req, res) {
+  var condition = "id = " + req.params.id;
+  burger.update({
+    devoured: req.body.devoured
+  }, condition, function() {
+    res.redirect("/");
+  });
+});
 // Export routes for server.js to use.
 module.exports = router;
